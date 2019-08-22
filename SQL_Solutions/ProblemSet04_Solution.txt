@@ -409,8 +409,6 @@ mysql> select avg(friends) from
 
  mysql> select (count(distinct f2.id1)+count(distinct f2.id2)) as friendsoffriends from friend f join highschooler h1
      on f.id2=h1.id
-     join highschooler h2
-     on f.id1=h2.id
      join friend f2 on f.id1=f2.id1 and f2.id2!=h1.id
      where h1.name='Cassandra' ;
 	 
