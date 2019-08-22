@@ -1,6 +1,46 @@
 DAY 1 SOLUTIONS
 # ProblemSet00 – Questions and solutions
+mysql>create table DEPT
+(DEP_ID varchar(3) primary key,
+DEP_NAME varchar(20),
+DEP_MANAGER varchar(20)
+);
 
+INSERT into DEPT values ('D01','HEALTH','TIM ARCHER');
+INSERT into DEPT values ('D02','COMMUNICATIONS','ADAM JUSTIN');
+INSERT into DEPT values ('D03','PRODUCT','BRUCE WILLS');
+INSERT into DEPT values ('D04','INSURANCE','ROBERT SWIFT');
+INSERT into DEPT values ('D05','FINANCE','NATASHA STEVENS');
+
+create table EMPLOYEE 
+(E_ID varchar(7) primary key,
+NAME varchar(20),
+DEP_ID varchar(3) references dept(dep_id),
+SALARY int,
+MANAGER_ID varchar(7)
+);
+
+INSERT into EMPLOYEE values ('A114','MARTIN TREDEAU','D01',54497,'A120');
+INSERT into EMPLOYEE values ('A116','ROBIN WAYNE','D02',20196,'A187');
+INSERT into EMPLOYEE values ('A178', 'BRUCE WILLS', 'D03', 66861 ,'A298'); 
+INSERT into EMPLOYEE values ('A132', 'PAUL VINCENT', 'D01', 94791,'A120'); 
+INSERT into EMPLOYEE values ('A198', 'TOM HANKS', 'D02', 16879, 'A187'); 
+INSERT into EMPLOYEE values ('A120','TIM ARCHER','D01', 48834 ,'A298');
+INSERT into EMPLOYEE values ('A143' ,'BRAD MICHAEL' ,'D01', 24488 ,'A120'); 
+INSERT into EMPLOYEE values ('A187' ,'ADAM JUSTIN', 'D02', 80543 ,'A298'); 
+INSERT into EMPLOYEE values ('A121', 'STUART WILLIAM' ,'D02', 78629 ,'A187'); 
+INSERT into EMPLOYEE values ('A188' ,'ROBERT SWIFT' ,'D04', 27700 ,'A298'); 
+INSERT into EMPLOYEE values ('A176' ,'EDWARD CANE', 'D01', 89176 ,'A120'); 
+INSERT into EMPLOYEE values ('A142', 'TARA CUMMINGS' ,'D04', 99475 ,'A188');
+INSERT into EMPLOYEE values ('A130' ,'VANESSA PARY', 'D04', 28565, 'A188'); 
+INSERT into EMPLOYEE values ('A128', 'ADAM WAYNE' ,'D05' ,94324 ,'A165'); 
+INSERT into EMPLOYEE values ('A129' ,'JOSEPH ANGELIN', 'D05', 44280 ,'A165'); 
+INSERT into EMPLOYEE values ('A165', 'NATASHA STEVENS', 'D05', 31377, 'A298'); 
+INSERT into EMPLOYEE values ('A111','JOHN HELLEN', 'D01',15380,'A120'); 
+INSERT into EMPLOYEE values ('A194', 'HAROLLD STEVENS','D02',32166,'A187'); 
+INSERT into EMPLOYEE values ('A133','STEVE MICHELOS','D02',61215,'A187'); 
+INSERT into EMPLOYEE values ('A156','NICK MARTIN','D03',50174,'A178'); 
+ 
 mysql> select * from dept;
 +--------+----------------+-----------------+
 | DEP_ID | DEP_NAME       | DEP_MANAGER     |
@@ -42,16 +82,18 @@ mysql> select * from employee;
 
 1)Select the Employee with the top three salaries
 			
-mysql>select * from employee where salary in (select distinct(salary) from employee order by salary desc limit 3);
-
-+------+--------------+--------+--------+------------+
-| E_ID | NAME         | DEP_ID | SALARY | MANAGER_ID |
-+------+--------------+--------+--------+------------+
-| A132 |PAUL VINCENT  | D01    |  94791 | A120       |
-| A142 |TARA CUMMINGS | D04    |  99475 | A188       |
-| A128 |ADAM WAYNE    | D05    |  94324 | A165       |
-+------+--------------+--------+--------+------------+
-1 row in set (0.00 sec)
+mysql> select e.e_id,e.name,e.dep_id,e.salary,e.manager_id from employee e join (
+  select e_id,salary as salary,dense_rank() over(order by salary desc) as sal from employee)
+  maxi on maxi.e_id=e.e_id where sal between 1 and 3;
+  
++------+---------------+--------+--------+------------+
+| e_id | name          | dep_id | salary | manager_id |
++------+---------------+--------+--------+------------+
+| A142 | TARA CUMMINGS | D04    |  99475 | A188       |
+| A132 | PAUL VINCENT  | D01    |  94791 | A120       |
+| A128 | ADAM WAYNE    | D05    |  94324 | A165       |
++------+---------------+--------+--------+------------+
+3 rows in set (0.00 sec)
 
 
 2)Select the Employee with the least salary
