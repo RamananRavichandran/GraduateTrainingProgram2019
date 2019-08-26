@@ -802,3 +802,26 @@ mysql> select A.m_name,inscnt,compcnt from ((select m_name,count(instrument)as i
 
 15. Jeff Dawn plays in a band with someone who plays in a band with Sue Little.
  Who is it and what are the bands? (1 point possible)
+ mysql>select m2.m_name,b5.band_name as "band1" ,b6.band_name as "band2" from musician m1 
+     join performer p1 on m1.m_no=p1.perf_is
+     join plays_in pi1 on p1.perf_no=pi1.player
+	 join plays_in pi2 on pi1.band_id=pi2.band_id
+	 join performer p2 on pi2.player=p2.perf_no
+	 join musician m2 on p2.perf_is=m2.m_no
+     join musician m4 on m2.m_no=m4.m_no
+	 join performer p4 on p4.perf_is=m4.m_no
+	 join plays_in pi4 on pi4.player=p4.perf_no
+	 join plays_in pi3 on pi3.band_id=pi4.band_id
+	 join performer p3 on p3.perf_no=pi3.player
+	 join musician m3 on m3.m_no=p3.perf_is
+	 join band b5 on pi2.band_id=b5.band_no
+	 join band b6 on pi4.band_id=b6.band_no
+	 where m1.m_name='Jeff Dawn' and  m3.m_name='Sue Little';
+	 
++------------+-------+-------+
+| m_name     | band1 | band2 |
++------------+-------+-------+
+| John Smith | AASO  | BBSO  |
++------------+-------+-------+
+1 row in set (0.03 sec)
+
