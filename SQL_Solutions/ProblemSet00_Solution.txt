@@ -99,6 +99,11 @@ mysql> select e.e_id,e.name,e.dep_id,e.salary,e.manager_id from employee e join 
 2)Select the Employee with the least salary
 
 mysql>select * from employee where salary = (select min(salary) from employee);
+			(or)
+mysql>select e1.e_id,e1.name,e1.dep_id,e1.salary,e1.manager_id from employee e1 join (
+	 select e_id,salary,dense_rank() over(order by salary) as sal from employee) e2
+         on e1.e_id=e2.e_id
+         where sal=1;
 
 +------+-------------+--------+--------+------------+
 | E_ID | NAME        | DEP_ID | SALARY | MANAGER_ID |
@@ -113,6 +118,8 @@ mysql>select * from employee where salary = (select min(salary) from employee);
 3)Select the Employee who does not have a manager in the department table	
 
 mysql>Select * from employee where manager_id not in (select e_id from employee e join dept d on e.name=d.dep_manager);
+			(or)
+mysql>select e2.e_id,e2.name,e2.dep_id,e2.salary,e2.manager_id from employee e2 left join  employee e on  e2.manager_id=e.e_id  left join dept d on e.name=d.dep_manager where e.e_id is null;
 
 +------+-----------------+--------+--------+------------+
 | E_ID | NAME            | DEP_ID | SALARY | MANAGER_ID |
@@ -130,6 +137,8 @@ mysql>Select * from employee where manager_id not in (select e_id from employee 
 
 mysql>Select * from employee where e_id in
 	(select e_id from employee e join dept d on e.name=d.dep_manager);
+			(or)
+mysql>select e1.e_id,e1.name,e1.dep_id,e1.salary,e1.manager_id from dept d join employee e on e.name=d.dep_manager join employee e1 on e.e_id=e1.e_id;
 
 +------+-----------------+--------+--------+------------+
 | E_ID | NAME            | DEP_ID | SALARY | MANAGER_ID |
