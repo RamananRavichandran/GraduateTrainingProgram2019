@@ -156,6 +156,9 @@ mysql>select e1.e_id,e1.name,e1.dep_id,e1.salary,e1.manager_id from dept d join 
 	
 mysql>select * from employee where salary=(select min(salary) from employee where e_id in
 	(select distinct(manager_id) from employee));
+			(or)
+select e_id,name,dep_id,salary,manager_id from (select e1.e_id,e1.name,e1.dep_id,e1.salary,e1.manager_id,dense_rank() over (order by e1.salary) sal from dept d join employee e on e.name=d.dep_manager join employee e1 on e.e_id=e1.e_id) tblsal where sal=1;
+
 
 +------+--------------+--------+--------+------------+
 | E_ID | NAME         | DEP_ID | SALARY | MANAGER_ID |
@@ -169,6 +172,8 @@ mysql>select * from employee where salary=(select min(salary) from employee wher
 
 mysql>select count(*) as totalemployee from employee where dep_id=
 (select dep_id from dept where dep_name='COMMUNICATIONS');
+			(or)
+select count(*) as totalemployee from employee e join dept d on e.dep_id=d.dep_id  where dep_name='COMMUNICATIONS';
 
 +---------------+
 | totalemployee |
@@ -182,6 +187,8 @@ mysql>select count(*) as totalemployee from employee where dep_id=
 
 mysql>select * from employee where (dep_id,salary)=
 	(select d.dep_id,max(salary) from employee e join dept d on e.dep_id=d.dep_id where d.dep_name='FINANCE');
+				(or)
+select e_id,name,dep_id,salary,manager_id from (select e_id,name,e.dep_id,salary,manager_id,dense_rank() over(partition by e.dep_id order by salary desc) as sal from employee e join dept d on e.dep_id=d.dep_id where dep_name='FINANCE') tblsal where sal=1;
 
 +------+------------+--------+--------+------------+
 | E_ID | NAME       | DEP_ID | SALARY | MANAGER_ID |
@@ -195,6 +202,8 @@ mysql>select * from employee where (dep_id,salary)=
 
 mysql>select * from employee where(dep_id,salary)=
 	(select d.dep_id,min(salary) from employee e join dept d on e.dep_id=d.dep_id where d.dep_name='PRODUCT');
+	(or)
+select e_id,name,dep_id,salary,manager_id from (select e_id,name,e.dep_id,salary,manager_id,dense_rank() over(partition by e.dep_id order by salary) as sal from employee e join dept d on e.dep_id=d.dep_id where dep_name='PRODUCT') tblsal where sal=1;
 
 +------+-------------+--------+--------+------------+
 | E_ID | NAME        | DEP_ID | SALARY | MANAGER_ID |
@@ -208,6 +217,8 @@ mysql>select * from employee where(dep_id,salary)=
 	
 mysql>select count(*) as employeecount from employee where (salary,dep_id)= (select max(salary),d.dep_id from employee e join dept d
 	on e.dep_id=d.dep_id where dep_name='HEALTH');
+			(or)
+select count(e_id) from (select e_id,dense_rank() over(partition by e.dep_id order by salary desc) as sal from employee e join dept d on e.dep_id=d.dep_id where dep_name='HEALTH') tblsal where sal=1;;
 
 +---------------+
 | employeecount |
@@ -305,6 +316,9 @@ mysql>select sum(salary) as totalexpenses from employee e join dept d on e.dep_i
 
 mysql>select e.dep_id,dep_manager from employee e join dept d on e.dep_id=d.dep_id group by e.dep_id having sum(salary)=
 	(select sum(salary) from employee group by dep_id order by sum(salary) limit 1);
+                        (or)
+			
+select e.dep_id,dep_manager from (select dep_id,dense_rank() over (order by sal ) salary from (select distinct dep_id,sum(salary) over(partition by dep_id)  sal from employee) tblsal) e join dept d on e.dep_id=d.dep_id where salary=1;
 
 +--------+-------------+
 | dep_id | dep_manager |
