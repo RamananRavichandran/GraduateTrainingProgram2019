@@ -1,0 +1,120 @@
+1.Write a Python program to combine each line from first file with the corresponding line in second file
+
+fname1='sample'
+fname2='sample1'
+with open(fname1, 'r') as f:
+	list1=f.readlines()
+with open(fname2, 'r') as f1:
+	list2=f1.readlines()
+min=min(len(list1),len(list2))
+for i in range(0,min):
+	print(list1[i],list2[i])
+
+
+2.Count new lines in file
+
+filename = sample
+count = 0
+with open(filename, 'r') as f:
+    for line in f:
+        count += 1
+print("Number of lines:"+str(count))
+
+3.Write a Python function that accepts a string and calculate the number of upper case letters and lower case letters.
+
+
+Sample String : 'The quick Brow Fox'
+Expected Output : 
+No. of Upper case characters : 3
+No. of Lower case Characters : 12
+
+def countletters(line):
+	count_small=0
+	count_caps=0
+	for s in line:
+		if ord(s)>=65 and ord(s)<=90:
+			count_caps+=1
+		if ord(s)>=97 and ord(s)<=122:
+			count_small+=1
+	print("No. of Upper case characters : "+str(count_caps))
+	print("No. of Lower case characters : "+str(count_small))
+
+
+string1=input("enter the string")
+countletters(string1)
+
+
+
+
+
+4.Write a Python function that takes a list and returns a new list with unique elements of the first list. Without using set
+Sample List : [1,2,3,3,3,3,4,5]
+Unique List : [1, 2, 3, 4, 5]
+
+
+def listwithoutdup(list1):
+	list2=[]
+	for i in list1:
+		if i not in list2:
+			list2.append(i)
+	return list2
+
+list1=[1,2,3,3,3,3,4,5]
+print(listwithoutdup(list1))
+
+5.Write a Python function to check whether a string is a pangram or not. 
+
+
+Note : Pangrams are words or sentences containing every letter of the alphabet at least once.
+For example : "The quick brown fox jumps over the lazy dog"
+
+
+ddef pangram(line1):
+	pan = 'abcdefghijklmnopqrstuvwxyz'
+	line2 = line1.lower()
+	flag = 1
+	for i in pan:
+		if i not in line2:
+			flag = 0
+			break
+	if (flag == 1):
+		return True
+	else:
+		return False
+
+
+string1 = input("enter the string")
+res = pangram(string1)
+if res == True:
+	print("the given string is pangram")
+else:
+	print("the given string is not pangram")
+
+
+6.Write a Python program that accepts a hyphen-separated sequence of words as input and prints the words in a hyphen-separated sequence after sorting them alphabetically. 
+
+
+Sample Items : green-red-yellow-black-white
+Expected Result : black-green-red-white-yellow
+
+
+
+def sortline(line1):
+    lines=line1.split("-")
+    lines.sort()
+    line2=lines[0]
+    for i in range(1,len(lines)):
+        line2+="-"+lines[i]
+    return line2
+
+
+string1=input("enter the hyphen seperated string")
+print(sortline(string1))
+
+
+
+
+
+
+
+
