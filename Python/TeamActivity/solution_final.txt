@@ -1,0 +1,230 @@
+
+1.Create user defined exceptino for capturing image files which is .jpg, .jpeg, .png etc.psd gif,
+Example:
+Please enter file name: png_file_details.pdf
+
+class formatexception(Exception):
+	pass
+
+class userdefinedeg(formatexception):
+	def __init__(self,filename):
+		self.filename=filename
+try:
+	fn=filename.split('.')
+	list1=['jpg','jpeg','png','psd','gif']
+	if fn[-1] in list1:
+		raise(formatexception("file extension shouldn't not be image"))
+except formatexception as e:
+	print("file extension shouldn't not be image")
+
+
+  
+
+2.Create simple banking process using class and function
+Example class/functions:
+new_user
+offer
+debit_card_issue., etc
+
+class new_user:
+	def __init__(self,an,un,addr,at,bal=1000):
+		self.accountnumber=an
+		self.username=un
+		self.address=addr
+		self.accounttype=at
+		self.balance=bal
+	def printdetails(self):
+		print("accountnumber"+self.accountnumber)
+		print("name"+self.username)
+		print("address"+self.address)
+		print("accounttype"+self.accounttype)
+		print("balance"+self.balance)
+	def checkbalance(self):
+		print("balance"+self.balance
+	def deposit(self,amount):
+		self.balance+=amount
+		print("successfully deposited")
+	def withdraw(self,amount):
+		amt=self.balance-amount
+		if amt<=1000:
+			print("insuffient balance to withdraw")
+		else:
+			self.balance-=amount	
+			print("sucess")
+	def offer(self):
+		if self.balance>1000:
+			self.balance+=self.balance*(10/100)
+user1=new_user('111111','sow','chennai','saving','2000')
+user1.checkbalance()
+user1.printdetails()
+user1.deposit(200)
+user1.checkbalance()
+
+user2=new_user('111112','deep','chennai','saving')
+user2.checkbalance()
+user2.printdetails()
+user2.withdraw(200)
+user2.offer()
+user2.checkbalance()
+
+user3=new_user('111113','maf','chennai','saving','5000')
+user3.checkbalance()
+user3.printdetails()
+user3.withdraw(200)
+user3.offer()
+user3.deposit(20000)
+user3.checkbalance()		
+		
+
+		
+
+3.Create student information file (xlsx format) from database.
+the table should contain 10 columns minimum
+get the list of student's identiy number input from the text file (.txt)
+
+import mysql.connector
+ip_file=input("enter the input file name")
+id_list=[]
+with open(ip_file,'r') as f:
+	id=f.readlines()
+	for i in id:
+		id_list.append(i.strip())
+tuple1=tuple(id_list)
+db=msql.connector.connect(host="localhost",user="root",password="root",database="student")
+curs=db.cursor()
+curs.execute("select * from student where id in %s",tuple1)
+curss=curs.fetchall()
+j=1
+for i in curss:
+	filename="file"+str(j)+".xlxs"
+	j+=1
+	fo=open(filename,'w')
+	write1=csv.writer(fo)
+	csv.writerow(i)
+	fo.close()
+	
+
+
+
+4.Read the IP Addresses from the file using regular expression
+
+import re
+file1=input("enter the file name")
+res_list=[]
+with open(file1,r) as f:
+	list1=f.readlines()
+	for i in list1:
+	   	line=i.strip()
+		ip_list=re.findAll(r'[\d]+\.[\d]+\.[\d]+\.[\d]+',line)
+		for li in ip_list:
+			flag=1
+			val=li.split('.')
+			for v in val:
+				if int(v) not in range(0,256):
+					flag=0
+					break
+				else:
+					continue
+			if flag==1:
+				res_list.apened(li)
+	print(res_list)
+					
+
+5.Convert number to words range will be 9999
+Example:
+1000 - one thousand
+1750 - one thousand seven hundred fifty
+4881 - four thousand eight hundred eighty one
+
+dict1={1:'one',2:'two',3:'three',4:'four',5:'five',6:'six',7:'seven',8:'eight',9:'nine'}
+dict2={1:'ten',2:'twenty',3:'thirty',4:'fourty',5:'fivety',6:'sixty',7:'seventy',8:'eighty',9:'ninety'}
+dict3={11:'eleven',12:'twelve',13:'thirteen',14:'fourteen',15:'fifteen',16:'sixteen',17:'seventeen',18:'eighteen',19:'nineteen'}
+number=input("enter the number")
+str1=""
+if(len(number)==4):
+    n1=number[0]
+    n2=number[1]
+    n3=number[2]
+    n4=number[3]
+
+    if int(n3+n4) in range(11,20):
+        str1+=str(dict1.get(int(n1)))+" thousand "+" "+str(dict1.get(int(n2)))+" hundred "+str(dict3.get(int(n3+n4)))
+    elif int(n4)==0:
+        str1+=str(dict1.get(int(n1)))+" thousand "+str(dict1.get(int(n2)))+" hundred "+str(dict2.get(int(n3)))
+    else:
+        str1+=str(dict1.get(int(n1)))+" thousand "+str(dict1.get(int(n2)))+" hundred "+str(dict2.get(int(n3)))+" "+str(dict1.get(int(n4)))
+    print(str1)
+elif(len(number)==3):
+    n2=number[0]
+    n3=number[1]
+    n4=number[2]
+    str1=""
+    if int(n3+n4) in range(11,20):
+        str1+=str(dict1.get(int(n2)))+" hundred "+str(dict3.get(int(n3+n4)))
+    elif int(n4)==0:
+        str1+=str(dict1.get(int(n2)))+" hundred "+str(dict2.get(int(n3)))
+    else:
+        str1+=str(dict1.get(int(n2)))+" hundred "+str(dict2.get(int(n3)))+" "+str(dict1.get(int(n4)))
+    print(str1)
+elif(len(number)==2):
+    n3=number[0]
+    n4=number[1]
+    str1=""
+    if int(n3+n4) in range(11,20):
+        str1+=str(dict3.get(int(n3+n4)))
+    elif int(n4)==0:
+        str1+=str(dict2.get(int(n3)))
+    else:
+        str1+=str(dict2.get(int(n3)))+" "+str(dict1.get(int(n4)))
+    print(str1)
+elif(len(number)==1):
+    n4=number[0]
+    str1+=str(dict1.get(int(n4)))
+    print(str1)
+
+
+6.Text Wrapping by given column range
+Example:
+Hi, this is sample text. -- (sample text)
+9 -- (column range)
+output:
+123456789
+Hi, this -- (right text padding can have spaces)
+is sample
+text. -- (no space is allowed in left text padding)
+
+ 
+
+
+
+
+7.Validate the given expression
+input: {(([8+3)])*(1+2)])}
+
+
+input1=input("enter the expression")
+dict1={')':'(','}':'{',']':'[','>':'<'}
+list1=[]
+
+flag=1
+for s in input1:
+    if s in '({[<':
+        list1.append(s)
+    elif s in '+-*/%' and s.isdigit():
+        continue
+    elif s in ')}]>' and len(list1)>0:
+        val1=list1.pop()
+        val2=dict1.get(s)
+        if val1 != val2:
+            flag=0
+            break
+    elif s and len(list1)==0:
+        flag=0
+        break
+
+if flag==1 and len(list1)==0:
+    print("The given expression is valid")
+else:
+    print("The given expression is invalid")
+			
+ 
