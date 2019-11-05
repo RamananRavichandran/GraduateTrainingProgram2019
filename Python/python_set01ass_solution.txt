@@ -47,19 +47,23 @@ else:
 """3 :Rotate the above matrix by 90 degree anticlockwise
 hint :convert row to column and column to row
 """
-list1 = [[3, 8, 7, 3], [8, 7, 9, 1], [1, 6, 0, 1], [2, 3, 1, 2]]
-list2 = []
-list3 = []
+list1 = [[3, 8, 7], [8, 7, 9], [1, 6, 0]]
+#transpose
+list2=[[0 for i in range(len(list1[0]))] for i in range(len(list1))]
 for i in range(0, len(list1)):
-    for j in range(0, len(list1)):
-        list2.append(list1[j][i])
-    list3.append(list2)
-    list2 = []
-for i in range(0, len(list3)):
-    for j in range(0, len(list3)):
-        print(list3[i][j], end="")
+    for j in range(0, len(list1[i])):
+        list2[i][j]=list1[j][i]
+#reverse colwise
+n=len(list2)-1
+for i in range(len(list2)//2):
+    temp=list2[i]
+    list2[i]=list2[n]
+    list2[n]=temp
+    n-=1
+for i in range(0, len(list2)):
+    for j in range(0, len(list2)):
+        print(list2[i][j], end="")
     print(end="\n")
-print(list3)
 
 
 """4: The string abcabcabc........ goes till 1111 . print the number of Occurrence of 'ca'"""
